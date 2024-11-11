@@ -12,7 +12,7 @@
 
 'Backend':
 - changed-files:
-  - any-glob-to-any-file: ['mithril/framework/backends/**/*']
+  - any-glob-to-any-file: ['mithril/backends/**/*']
 
 'Tests':
 - changed-files:
