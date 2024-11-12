@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+print("asdasdsa")
 from mithril import Backend, Constant, compile, epsilon_table
 from mithril.models import BaseModel, Model, Scalar, Tensor
 from mithril.models.primitives import PrimitiveModel
