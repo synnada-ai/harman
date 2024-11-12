@@ -166,7 +166,8 @@ class JaxBackend(ParallelBackend[jax.numpy.ndarray]):
         array_conversion_fn = partial(self._parallelize, fn=array_conversion_fn)
 
         return array_conversion_fn
-
+    
+    print('dffdasfasd')
     def _conversion_fn_wrapper(self, fn: Callable) -> Callable:
         """
         Wrapper for array conversion functions.
