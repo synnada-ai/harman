@@ -153,15 +153,7 @@ def validate_version(version: str):
         raise ValueError("Invalid version number, must be in the format x.y.z")
 
 
-def cli():
-    """Process command line arguments."""
-    args = sys.argv[1:]
-    if not args:
-        raise ValueError("Missing arguments, Usage: generate_changelog.py <token> ")
-
-    version = args[0]
-    token = args[1]
-
+def run(version: str, token: str):
     validate_version(version)
     project = "synnada-ai/harman"
 
@@ -180,6 +172,16 @@ def cli():
     with open(f"changelog/{version}.md", "w") as changelog_file:
         changelog_file.write(s)
 
+    # Generated changelog
+    print(s)
+
 
 if __name__ == "__main__":
-    cli()
+    """Process command line arguments."""
+    args = sys.argv[1:]
+    if not args:
+        raise ValueError("Missing arguments, Usage: generate_changelog.py <token> ")
+
+    version = args[0]
+    token = args[1]
+    run(version, token)
