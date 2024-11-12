@@ -14,9 +14,9 @@
 
 
 # Github Changelog Generator
-# This script generates a changelog for a GitHub repository based 
+# This script generates a changelog for a GitHub repository based
 # on the pull requests between two tags.
-# It categorizes the pull requests based on GitHub 
+# It categorizes the pull requests based on GitHub
 # labels and the Conventional Commits specification.
 # For now, it only suports the following categories:
 
@@ -27,25 +27,27 @@
 # to utilize this script fun the following command:
 
 # pip install PyGithub
-# python3 generate_changelog.py <token> <version> > releases/changelogs/<version>.md
+# python3 generate_changelog.py <token> <version>
 
-import sys
-from github import Github
+import io
 import re
-import subprocess
+import sys
+from contextlib import redirect_stdout
+
+from github import Github
+
 
 def print_pulls(repo_name, title, pulls):
-    if len(pulls)  > 0:
-        print("**{}:**".format(title))
+    if len(pulls) > 0:
+        print(f"**{title}:**")
         print()
-        for (pull, commit) in pulls:
-            url = "https://github.com/{}/pull/{}".format(repo_name, pull.number)
-            print("- {} [#{}]({}) ({})".format(pull.title, pull.number, url, commit.author.login))
+        for pull, commit in pulls:
+            url = f"https://github.com/{repo_name}/pull/{pull.number}"
+            print(f"- {pull.title} [#{pull.number}]({url}) ({commit.author.login})")
         print()
 
 
 def generate_changelog(repo, repo_name, tag1, tag2):
-
     # get a list of commits between two tags
     comparison = repo.compare(tag1, tag2)
 
@@ -73,41 +75,36 @@ def generate_changelog(repo, repo_name, tag1, tag2):
 
     # categorize the pull requests based on GitHub labels
     print("Categorizing pull requests", file=sys.stderr)
-    for (pull, commit) in all_pulls:
-
+    for pull, commit in all_pulls:
         # see if PR title uses Conventional Commits
-        cc_type = ''
-        cc_breaking = ''
-        parts = re.findall(r'^([a-z]+)(\([a-z]+\))?(!)?:', pull.title)
+        cc_type = ""
+        cc_breaking = ""
+        parts = re.findall(r"^([a-z]+)(\([a-z]+\))?(!)?:", pull.title)
         if len(parts) == 1:
             parts_tuple = parts[0]
-            cc_type = parts_tuple[0] # fix, feat, docs, chore
-            cc_breaking = parts_tuple[2] == '!'
+            cc_type = parts_tuple[0]  # fix, feat, docs, chore
+            cc_breaking = parts_tuple[2] == "!"
 
         labels = [label.name for label in pull.labels]
-        if 'api change' in labels or cc_breaking:
+        if "api change" in labels or cc_breaking:
             breaking.append((pull, commit))
-        elif 'bug' in labels or cc_type == 'fix':       
+        elif "bug" in labels or cc_type == "fix":
             bugs.append((pull, commit))
-        elif 'feature' in labels or cc_type == 'feat':
+        elif "feature" in labels or cc_type == "feat":
             features.append((pull, commit))
-        elif 'documentation' in labels or cc_type == 'docs':
+        elif "documentation" in labels or cc_type == "docs":
             docs.append((pull, commit))
-        elif "style" in labels or cc_type == 'style':
+        elif "style" in labels or cc_type == "style":
             style.append((pull, commit))
-        elif "performance" in labels or cc_type == 'perf':
+        elif "performance" in labels or cc_type == "perf":
             perf.append((pull, commit))
-        elif "tests" in labels or cc_type == 'test':
+        elif "tests" in labels or cc_type == "test":
             tests.append((pull, commit))
         else:
             other.append((pull, commit))
-            
 
     # produce the changelog content
     print("Generating changelog content", file=sys.stderr)
-
-
-    
 
     print("""<!--
     Copyright 2022 Synnada, Inc.
@@ -132,12 +129,14 @@ def generate_changelog(repo, repo_name, tag1, tag2):
     for commit in comparison.commits:
         author = commit.author.login
         unique_contributors.add(author)
-    
 
     # get number of contributors
     contributor_count = len(unique_contributors)
 
-    print(f"This release has {commit_count} commits from {contributor_count} contributors.")
+    print(
+        f"This release has {commit_count} commits from {contributor_count} "
+        "contributors."
+    )
 
     print_pulls(repo_name, "Breaking changes", breaking)
     print_pulls(repo_name, "Feature updates", features)
@@ -148,15 +147,39 @@ def generate_changelog(repo, repo_name, tag1, tag2):
     print_pulls(repo_name, "Fixed bugs", bugs)
     print_pulls(repo_name, "Other", other)
 
+
+def validate_version(version: str):
+    if not re.match(r"^\d+\.\d+\.\d+$", version):
+        raise ValueError("Invalid version number, must be in the format x.y.z")
+
+
 def cli():
+    """Process command line arguments."""
+    args = sys.argv[1:]
+    if not args:
+        raise ValueError("Missing arguments, Usage: generate_changelog.py <token> ")
+
+    version = args[0]
+    token = args[1]
+
+    validate_version(version)
     project = "synnada-ai/harman"
 
-    g = Github()
+    g = Github(token)
     repo = g.get_repo(project)
     all_releases = list(repo.get_releases())
-    prev_release = all_releases[-2].tag_name
-    new_release = all_releases[-1].tag_name
-    generate_changelog(repo, project, prev_release, new_release)
+    prev_release = all_releases[0].tag_name
+    new_release = "main"
+    print(f"Generating changelog for {project} from {prev_release} to {new_release}")
+
+    f = io.StringIO()
+    with redirect_stdout(f):
+        generate_changelog(repo, project, prev_release, new_release)
+    s = f.getvalue()
+
+    with open(f"changelog/{version}.md", "w") as changelog_file:
+        changelog_file.write(s)
+
 
 if __name__ == "__main__":
     cli()
