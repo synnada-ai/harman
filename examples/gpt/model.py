@@ -16,7 +16,7 @@
 This example is equivalent of nanoGPT by karpathy.
 Torch implementation of nanoGPT: https://github.com/karpathy/nanoGPT
 """
-
+print('afjksdkf')
 from mithril.models import (
     Add,
     Arange,

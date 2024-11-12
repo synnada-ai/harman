@@ -21,7 +21,7 @@ from jax.sharding import PositionalSharding
 
 from ...parallel import Parallel
 
-
+print("sdlkfsdlkf")
 class JaxParallel(Parallel[jax.numpy.ndarray]):
     def __init__(self, n_devices: int, device: str) -> None:
         available_devices = jax.device_count(device)
