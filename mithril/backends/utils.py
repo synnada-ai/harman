@@ -17,7 +17,7 @@ from collections.abc import Sequence
 from ..utils.type_utils import is_tuple_int
 
 NestedFloatOrIntOrBoolList = float | int | bool | list["NestedFloatOrIntOrBoolList"]
-
+print("safljksdf")
 
 def process_shape(
     shape: tuple[int | tuple[int, ...] | list[int], ...],
