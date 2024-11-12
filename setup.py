@@ -41,7 +41,7 @@ with open("README.md") as f:
 
 setuptools.setup(
     name="mithril",
-    version="0.2.0",
+    version="0.3.2",
     author="Synnada, Inc.",
     author_email="opensource@synnada.ai",
     description="A Modular Machine Learning Library for Model Composability",
