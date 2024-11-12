@@ -16,8 +16,10 @@ for label in labels:
     label = label.strip()
     if label in label_user_mapping:
         reviewers.update(label_user_mapping[label])
+        print(reviewers)
     if reviewers:
         prefix_arg = f"gh pr edit {number} --add-assignee "
         reviewers_arg = "".join(f"{reviewer} " for reviewer in reviewers)
         arg = prefix_arg + reviewers_arg
+        print(arg)
         subprocess.run(arg, shell=True)
