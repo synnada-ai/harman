@@ -40,14 +40,14 @@ with open("README.md") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="mithril",
-    version="0.3.2",
+    name="harman",
+    version="0.4.0",
     author="Synnada, Inc.",
     author_email="opensource@synnada.ai",
     description="A Modular Machine Learning Library for Model Composability",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/synnada-ai/composite-ml-new",
+    url="https://github.com/synnada-ai/mithril",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
