@@ -19,11 +19,7 @@ for label in labels:
         print(reviewers)
     if reviewers:
         prefix_arg = f"gh pr edit {number} --add-assignee "
-        if len(reviewers) == 1:
-            reviewers_arg = next(iter(reviewers))
-        else:
-            reviewers_arg = "".join(f"{reviewer}," for reviewer in reviewers)[:-1]
-        
-        arg = prefix_arg + reviewers_arg
-        print(arg)
-        subprocess.run(arg, shell=True)
+        for reviewer in reviewers:
+            arg = prefix_arg + str(reviewer)
+            print(arg)
+            subprocess.run(arg, shell=True)
