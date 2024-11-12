@@ -142,15 +142,15 @@ def mlp_v_torch(
     iterations: int,
 ):
     lr = 0.001
-    batch_size, _input_shape = input_shape[-1], input_shape[0]
+    batch_size, _input_shape = input_shape[0], input_shape[1]
     output_shape = [_input_shape] + [dimensions[-1]]
     device = "cpu"
     dtype_torch = getattr(torch, f"float{precision}")
     torch.set_default_dtype(dtype_torch)
 
     inputs = {
-        "input": torch.randn(batch_size, *input_shape, device=device),
-        "target": torch.randn(batch_size, *output_shape, device=device),
+        "input": torch.randn(*input_shape, device=device),
+        "target": torch.randn(*output_shape, device=device),
     }
 
     mlp_compl = create_compl_mlp(
