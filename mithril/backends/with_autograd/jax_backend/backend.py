@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+print("JaxBackend")
 import math
 import os
 from collections.abc import Callable, Sequence
