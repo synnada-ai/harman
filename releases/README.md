@@ -3,6 +3,17 @@
 This folder contains information about all currently released Mithril versions. You can check what has changed in each release in this folder.
 
 
+## Steps
+
+1. Create a branch with name of "prepare_{x.y.z}"
+2. Checkout the branch
+3. Update setup.py with the correct version, check also other informations
+4. Push changes in setup.py
+5. Change directory to releases directory
+6. Ensure all items are done in the checklist below
+7. Run the command ```bash push_release_log.sh <version> <token>```
+
+
 ## Release Checklist
 
 The person responsible for the upcoming release of Mithril should follow this checklist:
