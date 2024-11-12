@@ -31,4 +31,4 @@ jobs:
     - name: Assign Reviewers # Assign responsible people based on labels
       if: steps.pr-labeler.outputs.all-labels
       run: |
-        python .github/scripts/assign_reviewers.py "${{ steps.pr-labeler.outputs.all-labels }}"
+        python .github/scripts/assign_reviewers.py "${{ github.event.pull_request.number }}" "${{ steps.pr-labeler.outputs.all-labels }}"
