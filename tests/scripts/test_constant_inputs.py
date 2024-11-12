@@ -15,7 +15,7 @@
 from collections.abc import Iterable, Mapping, Sequence
 from itertools import product
 from types import EllipsisType
-
+print("Loading mithril.backends.parallel")
 import numpy as np
 import pytest
 import torch
