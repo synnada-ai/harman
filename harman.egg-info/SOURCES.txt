@@ -1,5 +1,0 @@
-setup.py
-harman.egg-info/PKG-INFO
-harman.egg-info/SOURCES.txt
-harman.egg-info/dependency_links.txt
-harman.egg-info/top_level.txt
