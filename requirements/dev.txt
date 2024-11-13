@@ -1,7 +1,0 @@
-numpy
-scipy
-mlx
-flax
-pytest
-pytest-cov
-setuptools
